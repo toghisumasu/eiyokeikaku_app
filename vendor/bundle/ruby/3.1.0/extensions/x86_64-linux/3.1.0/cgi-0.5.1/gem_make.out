@@ -1,0 +1,15 @@
+current directory: /home/shinobuccio/projects/eiyoukensaku_app/vendor/bundle/ruby/3.1.0/gems/cgi-0.5.1/ext/cgi/escape
+/usr/bin/ruby3.1 -I /usr/lib/ruby/vendor_ruby -r ./siteconf20260415-3052-ce07rf.rb extconf.rb
+creating Makefile
+
+current directory: /home/shinobuccio/projects/eiyoukensaku_app/vendor/bundle/ruby/3.1.0/gems/cgi-0.5.1/ext/cgi/escape
+make DESTDIR\= clean
+
+current directory: /home/shinobuccio/projects/eiyoukensaku_app/vendor/bundle/ruby/3.1.0/gems/cgi-0.5.1/ext/cgi/escape
+make DESTDIR\=
+compiling escape.c
+linking shared-object cgi/escape.so
+
+current directory: /home/shinobuccio/projects/eiyoukensaku_app/vendor/bundle/ruby/3.1.0/gems/cgi-0.5.1/ext/cgi/escape
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 escape.so ./.gem.20260415-3052-w996su/cgi
