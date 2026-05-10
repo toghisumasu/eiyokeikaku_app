@@ -64,3 +64,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+# 食品成分表XLSXインポート用
+gem "roo", "~> 2.10"
+
