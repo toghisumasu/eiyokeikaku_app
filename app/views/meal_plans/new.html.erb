@@ -1,0 +1,17 @@
+<h1>献立作成</h1>
+
+<%= form_with model: @meal_plan do |f| %>
+  <div>
+    <label>献立名</label>
+    <%= f.text_field :title, placeholder: "例: 5月12日 給食" %>
+  </div>
+  <div>
+    <label>日付</label>
+    <%= f.date_field :plan_date %>
+  </div>
+  <div>
+    <label>メモ</label>
+    <%= f.text_area :memo, rows: 3 %>
+  </div>
+  <%= f.submit "献立を作成する" %>
+<% end %>

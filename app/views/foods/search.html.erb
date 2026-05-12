@@ -1,0 +1,41 @@
+<h1>食品検索</h1>
+
+<%= form_with url: foods_search_path, method: :get, local: true do |f| %>
+  <%= f.text_field :q, value: params[:q], placeholder: "食品名を入力（例: トマト）" %>
+  <%= f.hidden_field :meal_plan_id, value: @meal_plan_id %>
+  <%= f.submit "検索" %>
+<% end %>
+
+<% if @foods.any? %>
+  <table border="1">
+    <tr>
+      <th>食品名</th>
+      <th>エネルギー(kcal)</th>
+      <th>たんぱく質(g)</th>
+      <th>脂質(g)</th>
+      <th>炭水化物(g)</th>
+      <% if @meal_plan_id.present? %>
+        <th>追加</th>
+      <% end %>
+    </tr>
+    <% @foods.each do |food| %>
+      <tr>
+        <td><%= food.food_name %></td>
+        <td><%= food.energy_kcal %></td>
+        <td><%= food.protein_g %></td>
+        <td><%= food.fat_g %></td>
+        <td><%= food.carbohydrate_g %></td>
+        <% if @meal_plan_id.present? %>
+          <td>
+            <%= form_with url: foods_add_to_plan_path, local: true do |f| %>
+              <%= f.hidden_field :meal_plan_id, value: @meal_plan_id %>
+              <%= f.hidden_field :food_id, value: food.id %>
+              <%= f.number_field :grams, placeholder: "g数", min: 1, style: "width:60px" %>
+              <%= f.submit "追加" %>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
