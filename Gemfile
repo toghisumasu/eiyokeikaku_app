@@ -66,5 +66,5 @@ group :test do
 end
 
 # 食品成分表XLSXインポート用
-gem "roo", "~> 2.10"
+gem "roo", "~> 3.0"
 
