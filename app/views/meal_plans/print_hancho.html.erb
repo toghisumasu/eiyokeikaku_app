@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>献立帳票</title>
+  <style>
+    body { font-family: sans-serif; font-size: 12px; margin: 20px; }
+    h1 { font-size: 16px; text-align: center; }
+    .info { text-align: center; margin-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+    th, td { border: 1px solid #333; padding: 4px 6px; }
+    th { background: #f0f0f0; text-align: center; }
+    .yellow th.hdr { background: #fff9c4; }
+    .red    th.hdr { background: #ffcccc; }
+    .green  th.hdr { background: #ccffcc; }
+    .other  th.hdr { background: #e0e0e0; }
+    .totals th { background: #ddeeff; }
+    td.num { text-align: right; }
+    @media print {
+      button { display: none; }
+      body { margin: 5mm; }
+    }
+  </style>
+</head>
+<body>
+  <h1>献立帳票（幼児食）</h1>
+  <div class="info">
+    <strong><%= @meal_plan.plan_date %></strong>
+    　<%= @meal_plan.title %>
+    <% if @meal_plan.memo.present? %>
+      　<%= @meal_plan.memo %>
+    <% end %>
+  </div>
+
+  <button onclick="window.print()">印刷</button>
+
+  <% { yellow: ["黄（熱と力）", "yellow"], red: ["赤（血や肉や骨）", "red"], green: ["緑（体の調子）", "green"], other: ["その他", "other"] }.each do |key, (label, css)| %>
+    <% items = @by_color[key] %>
+    <% next if items.empty? %>
+    <table class="<%= css %>">
+      <tr><th class="hdr" colspan="3"><%= label %></th></tr>
+      <tr><th>食品名</th><th>g数</th><th>エネルギー(kcal)</th></tr>
+      <% items.each do |item| %>
+        <tr>
+          <td><%= item.food.food_name %></td>
+          <td class="num"><%= item.grams %></td>
+          <td class="num"><%= item.energy_kcal.round(1) %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+
+  <table class="totals">
+    <tr><th colspan="2">栄養素合計</th></tr>
+    <tr><th>エネルギー</th><td class="num"><%= @totals[:energy_kcal] %> kcal</td></tr>
+    <tr><th>たんぱく質</th><td class="num"><%= @totals[:protein_g] %> g</td></tr>
+    <tr><th>脂質</th><td class="num"><%= @totals[:fat_g] %> g</td></tr>
+    <tr><th>炭水化物</th><td class="num"><%= @totals[:carbohydrate_g] %> g</td></tr>
+    <tr><th>カルシウム</th><td class="num"><%= @totals[:calcium_mg] %> mg</td></tr>
+    <tr><th>鉄</th><td class="num"><%= @totals[:iron_mg] %> mg</td></tr>
+    <tr><th>ビタミンC</th><td class="num"><%= @totals[:vitamin_c_mg] %> mg</td></tr>
+    <tr><th>食塩相当量</th><td class="num"><%= @totals[:salt_g] %> g</td></tr>
+  </table>
+</body>
+</html>

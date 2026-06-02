@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   resources :meal_plans, only: [:new, :create, :show] do
     member do
       delete "items/:item_id", to: "meal_plans#destroy_item", as: :destroy_item
+      get    :download_md
+      get    :print_hancho
     end
   end
 

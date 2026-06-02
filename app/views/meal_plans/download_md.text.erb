@@ -1,0 +1,18 @@
+# <%= @meal_plan.title %>
+
+date: <%= @meal_plan.plan_date %>
+<% if @meal_plan.memo.present? %>
+memo: <%= @meal_plan.memo %>
+<% end %>
+
+## Menu
+
+| Food | g | kcal | protein(g) | fat(g) | carb(g) | Ca(mg) | Fe(mg) | VitC(mg) | salt(g) |
+|------|---|------|------------|--------|---------|--------|--------|----------|---------|
+<% @items.each do |item| %>
+| <%= item.food.food_name %> | <%= item.grams %> | <%= item.energy_kcal.round(1) %> | <%= item.protein_g.round(1) %> | <%= item.fat_g.round(1) %> | <%= item.carbohydrate_g.round(1) %> | <%= item.calcium_mg.round(1) %> | <%= item.iron_mg.round(1) %> | <%= item.vitamin_c_mg.round(1) %> | <%= item.salt_g.round(1) %> |
+<% end %>
+| total | | <%= @totals[:energy_kcal] %> | <%= @totals[:protein_g] %> | <%= @totals[:fat_g] %> | <%= @totals[:carbohydrate_g] %> | | | | |
+
+---
+*<%= Time.current.strftime("%Y-%m-%d %H:%M") %>*

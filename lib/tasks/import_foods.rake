@@ -16,15 +16,14 @@ namespace :foods do
     sheet = xlsx.sheet(0)
     imported = 0
     skipped  = 0
-
     (13..sheet.last_row).each do |i|
       row = sheet.row(i)
       food_code = row[1]
       food_name = row[3]
       next if food_code.nil? || food_name.nil?
-
       Food.find_or_create_by(food_code: food_code.to_s) do |f|
         f.food_name      = food_name.to_s
+        f.food_category  = row[0].to_s.strip
         f.energy_kcal    = parse_nutrient(row[6])
         f.protein_g      = parse_nutrient(row[9])
         f.fat_g          = parse_nutrient(row[12])
@@ -39,8 +38,25 @@ namespace :foods do
         imported += 1
       end
     end
-
     puts "インポート完了: #{imported}件 / スキップ: #{skipped}件"
     puts "総レコード数: #{Food.count}"
+  end
+
+  desc "既存foodsレコードにfood_categoryを補完する"
+  task update_category: :environment do
+    xlsx_path = '/Volumes/share/eiyoso/20201225-mxt_kagsei-mext_01110_012.xlsx'
+    xlsx = Roo::Spreadsheet.open(xlsx_path)
+    sheet = xlsx.sheet(0)
+    updated = 0
+    (13..sheet.last_row).each do |i|
+      row = sheet.row(i)
+      food_code = row[1]
+      next if food_code.nil?
+      food = Food.find_by(food_code: food_code.to_s)
+      next if food.nil?
+      food.update!(food_category: row[0].to_s.strip)
+      updated += 1
+    end
+    puts "更新完了: #{updated}件"
   end
 end

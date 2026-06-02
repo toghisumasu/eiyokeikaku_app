@@ -50,4 +50,7 @@
   <p>食品が追加されていません。</p>
 <% end %>
 
+<p><%= link_to "Download MD", download_md_meal_plan_path(@meal_plan) %></p>
+<p><%= link_to "帳票印刷（幼児食）", print_hancho_meal_plan_path(@meal_plan) %></p>
+
 <p><%= link_to "新しい献立を作成", new_meal_plan_path %></p>
