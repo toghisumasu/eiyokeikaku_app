@@ -1,6 +1,9 @@
 class Food < ApplicationRecord
   has_many :meal_plan_items
   has_many :meal_plans, through: :meal_plan_items
+  has_many :dish_ingredients
+  has_many :dishes, through: :dish_ingredients
+  has_many :seasonal_ingredients
 
   YELLOW_CATEGORIES = %w[01 02 03 05 14 15 16]
   RED_CATEGORIES    = %w[09 10 11 12]
