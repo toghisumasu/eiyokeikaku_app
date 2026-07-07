@@ -1,0 +1,10 @@
+<h1>料理一覧</h1>
+
+<% @dishes_by_category.each do |category, dishes| %>
+  <h2><%= category %></h2>
+  <ul>
+    <% dishes.each do |dish| %>
+      <li><%= dish.name %></li>
+    <% end %>
+  </ul>
+<% end %>

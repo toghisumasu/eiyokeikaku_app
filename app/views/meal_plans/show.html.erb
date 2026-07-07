@@ -1,56 +1,32 @@
 <h1><%= @meal_plan.title %></h1>
 <p>日付: <%= @meal_plan.plan_date %></p>
-<p><%= @meal_plan.memo %></p>
 
-<h2>食品を追加</h2>
-<%= form_with url: foods_search_path, method: :get, local: true do |f| %>
-  <%= f.text_field :q, value: params[:q], placeholder: "食品名を入力" %>
-  <%= f.hidden_field :meal_plan_id, value: @meal_plan.id %>
-  <%= f.submit "検索" %>
-<% end %>
-
-<h2>献立内容</h2>
-<% if @items.any? %>
-  <table border="1">
-    <tr>
-      <th>食品名</th>
-      <th>グラム数</th>
-      <th>エネルギー</th>
-      <th>たんぱく質</th>
-      <th>脂質</th>
-      <th>炭水化物</th>
-      <th>操作</th>
-    </tr>
-    <% @items.each do |item| %>
-      <tr>
-        <td><%= item.food.food_name %></td>
-        <td><%= item.grams %>g</td>
-        <td><%= item.energy_kcal.round(1) %>kcal</td>
-        <td><%= item.protein_g.round(1) %>g</td>
-        <td><%= item.fat_g.round(1) %>g</td>
-        <td><%= item.carbohydrate_g.round(1) %>g</td>
-        <td>
-          <%= button_to "削除",
-            destroy_item_meal_plan_path(@meal_plan, item_id: item.id),
-            method: :delete,
-            data: { confirm: "削除しますか？" } %>
-        </td>
-      </tr>
-    <% end %>
-    <tr>
-      <td colspan="2"><strong>合計</strong></td>
-      <td><strong><%= @totals[:energy_kcal] %>kcal</strong></td>
-      <td><strong><%= @totals[:protein_g] %>g</strong></td>
-      <td><strong><%= @totals[:fat_g] %>g</strong></td>
-      <td><strong><%= @totals[:carbohydrate_g] %>g</strong></td>
-      <td></td>
-    </tr>
-  </table>
+<h2>料理</h2>
+<% if @dishes_by_category.any? %>
+  <% @dishes_by_category.each do |category, dishes| %>
+    <h3><%= category %></h3>
+    <ul>
+      <% dishes.each do |dish| %>
+        <li><%= dish.name %></li>
+      <% end %>
+    </ul>
+  <% end %>
 <% else %>
-  <p>食品が追加されていません。</p>
+  <p>料理が登録されていません。</p>
 <% end %>
 
+<h2>栄養価サマリー</h2>
+<table border="1">
+  <tr><th>エネルギー</th><td><%= @nutrition[:energy_kcal] %> kcal</td></tr>
+  <tr><th>たんぱく質</th><td><%= @nutrition[:protein_g] %> g</td></tr>
+  <tr><th>脂質</th><td><%= @nutrition[:fat_g] %> g</td></tr>
+  <tr><th>炭水化物</th><td><%= @nutrition[:carbohydrate_g] %> g</td></tr>
+</table>
+
+<h2>コメント</h2>
+<p><%= @meal_plan.comment.presence || "コメントはありません。" %></p>
+
+<p><%= link_to "編集", edit_meal_plan_path(@meal_plan) %></p>
 <p><%= link_to "Download MD", download_md_meal_plan_path(@meal_plan) %></p>
 <p><%= link_to "帳票印刷（幼児食）", print_hancho_meal_plan_path(@meal_plan) %></p>
-
 <p><%= link_to "新しい献立を作成", new_meal_plan_path %></p>

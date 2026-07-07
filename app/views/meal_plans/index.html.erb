@@ -1,0 +1,38 @@
+<h1>献立カレンダー</h1>
+
+<p>
+  <%= link_to "前月", meal_plans_path(month: (@month - 1.month).strftime("%Y-%m")) %>
+  <strong><%= @month.strftime("%Y年%m月") %></strong>
+  <%= link_to "次月", meal_plans_path(month: (@month + 1.month).strftime("%Y-%m")) %>
+</p>
+
+<%
+  first_day = @month.beginning_of_month
+  last_day  = @month.end_of_month
+  days = Array.new(first_day.wday) { nil } + (first_day..last_day).to_a
+  days += Array.new((7 - days.size % 7) % 7) { nil }
+%>
+
+<table border="1" style="width: 100%; text-align: center;">
+  <tr>
+    <% %w[日 月 火 水 木 金 土].each do |wday| %>
+      <th><%= wday %></th>
+    <% end %>
+  </tr>
+  <% days.each_slice(7) do |week| %>
+    <tr>
+      <% week.each do |date| %>
+        <td style="vertical-align: top; height: 80px;">
+          <% if date %>
+            <div><%= date.day %></div>
+            <% (@meal_plans_by_date[date] || []).each do |meal_plan| %>
+              <div><%= link_to meal_plan.title, meal_plan_path(meal_plan) %></div>
+            <% end %>
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "新しい献立を作成", new_meal_plan_path %></p>

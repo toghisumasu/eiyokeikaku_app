@@ -1,0 +1,26 @@
+<h1>献立編集: <%= @meal_plan.title %></h1>
+
+<%= form_with model: @meal_plan, url: meal_plan_path(@meal_plan), method: :patch do |f| %>
+  <%= hidden_field_tag "meal_plan[dish_ids][]", "" %>
+
+  <% @dishes_by_category.each do |category, dishes| %>
+    <h2><%= category %></h2>
+    <% dishes.each do |dish| %>
+      <div>
+        <label>
+          <%= check_box_tag "meal_plan[dish_ids][]", dish.id, @selected_dish_ids.include?(dish.id), id: "dish_#{dish.id}" %>
+          <%= dish.name %>
+        </label>
+      </div>
+    <% end %>
+  <% end %>
+
+  <h2>コメント</h2>
+  <div>
+    <%= f.text_area :comment, rows: 3 %>
+  </div>
+
+  <%= f.submit "保存" %>
+<% end %>
+
+<p><%= link_to "献立に戻る", @meal_plan %></p>
