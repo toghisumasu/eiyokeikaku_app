@@ -1,10 +1,42 @@
-<h1>料理一覧</h1>
+<h1>旬の食材から料理候補を絞り込む</h1>
 
-<% @dishes_by_category.each do |category, dishes| %>
-  <h2><%= category %></h2>
+<%= form_with url: dishes_path, method: :get, local: true do |f| %>
+  <label>
+    月
+    <%= select_tag :month, options_for_select(@months.map { |m| ["#{m}月", m] }, @month) %>
+  </label>
+  <label>
+    地域
+    <%= select_tag :region, options_for_select(@regions, @region) %>
+  </label>
+  <%= f.submit "絞り込む" %>
+<% end %>
+
+<h2><%= @month %>月・<%= @region %>の旬の食材</h2>
+<% if @seasonal_foods.any? %>
   <ul>
-    <% dishes.each do |dish| %>
-      <li><%= dish.name %></li>
+    <% @seasonal_foods.each do |food| %>
+      <li><%= food.food_name %></li>
     <% end %>
   </ul>
+<% else %>
+  <p>この月・地域の旬の食材は登録されていません。</p>
+<% end %>
+
+<h2>料理候補</h2>
+<% if @dishes_by_category.any? %>
+  <% @dishes_by_category.each do |category, dishes| %>
+    <h3><%= category %></h3>
+    <ul>
+      <% dishes.each do |dish| %>
+        <% matched = dish.dish_ingredients.select { |di| @seasonal_foods.include?(di.food) } %>
+        <li>
+          <%= dish.name %>
+          （旬食材: <%= matched.map { |di| di.food.food_name }.join("、") %>）
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+<% else %>
+  <p>該当する料理候補がありません。</p>
 <% end %>
