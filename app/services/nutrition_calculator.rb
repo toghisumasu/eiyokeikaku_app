@@ -5,12 +5,12 @@ class NutritionCalculator
   ].freeze
 
   def self.call(meal_plan)
-    ingredients = meal_plan.meal_plan_dishes
-                            .includes(dish: { dish_ingredients: :food })
-                            .flat_map { |meal_plan_dish| meal_plan_dish.dish.dish_ingredients }
+    menu_items = meal_plan.meal_plan_dishes
+                           .includes(menu_items: :food)
+                           .flat_map(&:menu_items)
 
     NUTRIENTS.each_with_object({}) do |nutrient, totals|
-      total = ingredients.sum { |ingredient| ingredient.food.public_send(nutrient).to_f * ingredient.amount_g / 100.0 }
+      total = menu_items.sum { |menu_item| menu_item.food.public_send(nutrient).to_f * menu_item.amount / 100.0 }
       totals[nutrient] = total.round(1)
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_07_100059) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_08_031057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,6 +56,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_100059) do
     t.datetime "created_at", null: false
     t.bigint "dish_id", null: false
     t.bigint "meal_plan_id", null: false
+    t.integer "position", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["dish_id"], name: "index_meal_plan_dishes_on_dish_id"
     t.index ["meal_plan_id"], name: "index_meal_plan_dishes_on_meal_plan_id"
@@ -64,7 +65,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_100059) do
   create_table "meal_plan_items", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "food_id", null: false
-    t.decimal "grams"
+    t.decimal "grams", precision: 8, scale: 1
     t.bigint "meal_plan_id", null: false
     t.datetime "updated_at", null: false
     t.index ["food_id"], name: "index_meal_plan_items_on_food_id"
@@ -78,6 +79,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_100059) do
     t.date "plan_date"
     t.string "title"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "menu_items", force: :cascade do |t|
+    t.decimal "amount", precision: 8, scale: 1
+    t.datetime "created_at", null: false
+    t.bigint "food_id", null: false
+    t.bigint "meal_plan_dish_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["food_id"], name: "index_menu_items_on_food_id"
+    t.index ["meal_plan_dish_id"], name: "index_menu_items_on_meal_plan_dish_id"
   end
 
   create_table "seasonal_ingredients", force: :cascade do |t|
@@ -95,5 +106,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_100059) do
   add_foreign_key "meal_plan_dishes", "meal_plans"
   add_foreign_key "meal_plan_items", "foods"
   add_foreign_key "meal_plan_items", "meal_plans"
+  add_foreign_key "menu_items", "foods"
+  add_foreign_key "menu_items", "meal_plan_dishes"
   add_foreign_key "seasonal_ingredients", "foods"
 end

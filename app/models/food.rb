@@ -6,8 +6,8 @@ class Food < ApplicationRecord
   has_many :seasonal_ingredients
 
   YELLOW_CATEGORIES = %w[01 02 03 05 14 15 16]
-  RED_CATEGORIES    = %w[09 10 11 12]
-  GREEN_CATEGORIES  = %w[06 07 08]
+  RED_CATEGORIES    = %w[10 11 12]
+  GREEN_CATEGORIES  = %w[06 07 08 09]
 
   def color_group
     return :yellow if YELLOW_CATEGORIES.include?(food_category)

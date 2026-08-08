@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   # 料理
   resources :dishes, only: [:index]
 
+  # 献立内の食品明細（分量インライン編集）
+  resources :menu_items, only: [:update]
+
   # 献立
   resources :meal_plans, only: [:index, :new, :create, :show, :edit, :update] do
     member do

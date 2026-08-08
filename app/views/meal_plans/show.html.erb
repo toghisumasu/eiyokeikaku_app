@@ -2,21 +2,34 @@
 <p>日付: <%= @meal_plan.plan_date %></p>
 
 <h2>料理</h2>
-<% if @dishes_by_category.any? %>
-  <% @dishes_by_category.each do |category, dishes| %>
-    <h3><%= category %></h3>
-    <ul>
-      <% dishes.each do |dish| %>
-        <li><%= dish.name %></li>
-      <% end %>
-    </ul>
+<% if @meal_plan_dishes.any? %>
+  <% @meal_plan_dishes.each do |meal_plan_dish| %>
+    <h3><%= meal_plan_dish.category.presence || "-" %> / <%= meal_plan_dish.dish.name %></h3>
+    <table class="nutrition-table">
+      <thead>
+        <tr><th>食品</th><th>分量 (g)</th></tr>
+      </thead>
+      <tbody>
+        <% meal_plan_dish.menu_items.each do |menu_item| %>
+          <tr>
+            <td><%= menu_item.food.food_name %></td>
+            <td>
+              <%= form_with model: menu_item, url: menu_item_path(menu_item), method: :patch, local: true, html: { class: "inline-amount-form" } do |f| %>
+                <%= f.number_field :amount, step: 0.1, min: 0.1 %>
+                <%= f.submit "更新" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   <% end %>
 <% else %>
   <p>料理が登録されていません。</p>
 <% end %>
 
 <h2>栄養価サマリー</h2>
-<table border="1">
+<table class="nutrition-table">
   <tr><th>エネルギー</th><td><%= @nutrition[:energy_kcal] %> kcal</td></tr>
   <tr><th>たんぱく質</th><td><%= @nutrition[:protein_g] %> g</td></tr>
   <tr><th>脂質</th><td><%= @nutrition[:fat_g] %> g</td></tr>
