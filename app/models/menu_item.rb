@@ -2,7 +2,7 @@ class MenuItem < ApplicationRecord
   belongs_to :meal_plan_dish
   belongs_to :food
 
-  validates :amount, presence: true, numericality: { greater_than: 0 }
+  validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   # 栄養素計算（per 100g → 指定グラム数分）
   def energy_kcal

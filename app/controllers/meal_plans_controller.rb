@@ -32,18 +32,20 @@ class MealPlansController < ApplicationController
   end
 
   def update
-    @meal_plan.comment = meal_plan_params[:comment]
-    @meal_plan.save!
+    ActiveRecord::Base.transaction do
+      @meal_plan.comment = meal_plan_params[:comment]
+      @meal_plan.save!
 
-    dish_ids = Array(meal_plan_params[:dish_ids]).reject(&:blank?).map(&:to_i)
-    @meal_plan.meal_plan_dishes.where.not(dish_id: dish_ids).destroy_all
-    existing_dish_ids = @meal_plan.meal_plan_dishes.pluck(:dish_id)
-    next_position = @meal_plan.meal_plan_dishes.maximum(:position).to_i + 1
-    (dish_ids - existing_dish_ids).each do |dish_id|
-      dish = Dish.find(dish_id)
-      meal_plan_dish = @meal_plan.meal_plan_dishes.create!(dish: dish, category: dish.category, position: next_position)
-      meal_plan_dish.seed_menu_items_from_dish!
-      next_position += 1
+      dish_ids = Array(meal_plan_params[:dish_ids]).reject(&:blank?).map(&:to_i)
+      @meal_plan.meal_plan_dishes.where.not(dish_id: dish_ids).destroy_all
+      existing_dish_ids = @meal_plan.meal_plan_dishes.pluck(:dish_id)
+      next_position = @meal_plan.meal_plan_dishes.maximum(:position).to_i + 1
+      (dish_ids - existing_dish_ids).each do |dish_id|
+        dish = Dish.find(dish_id)
+        meal_plan_dish = @meal_plan.meal_plan_dishes.create!(dish: dish, category: dish.category, position: next_position)
+        meal_plan_dish.seed_menu_items_from_dish!
+        next_position += 1
+      end
     end
 
     redirect_to @meal_plan
