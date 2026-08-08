@@ -39,7 +39,7 @@
 <h2>コメント</h2>
 <p><%= @meal_plan.comment.presence || "コメントはありません。" %></p>
 
-<p><%= link_to "編集", edit_meal_plan_path(@meal_plan) %></p>
+<p><%= link_to "料理を変更", edit_meal_plan_path(@meal_plan) %></p>
 <p><%= link_to "Download MD", download_md_meal_plan_path(@meal_plan) %></p>
 <p><%= link_to "帳票印刷（幼児食）", print_hancho_meal_plan_path(@meal_plan) %></p>
 <p><%= link_to "新しい献立を作成", new_meal_plan_path %></p>

@@ -1,4 +1,4 @@
-<h1>献立編集: <%= @meal_plan.title %></h1>
+<h1>料理を変更: <%= @meal_plan.title %></h1>
 
 <%= form_with model: @meal_plan, url: meal_plan_path(@meal_plan), method: :patch do |f| %>
   <%= hidden_field_tag "meal_plan[dish_ids][]", "" %>
